@@ -1,3 +1,5 @@
+// Cubic Spline Interpolation
+
 console.log("Hello Joe!");
 console.log("Hello Dane!");
 
@@ -14,35 +16,41 @@ console.log("Hello Dane!");
  * 
  */
 
-// A point
-// Make class - in seperate file
+
+// A point object
 var point = function(x, y){
 	this.x = x
-	this.y = y
-	
+	this.y = y	
 }
 
-points = [] //main point array
+var points = [] //main point array
 
-/*var p1 = new point(-3,12)
+var p1 = new point(-3,12)
 var p2 = new point(2, 5)
 var p3 = new point(4, 7)
 var p4 = new point(9, 7)
 var p5 = new point(16, -1)
 var p6 = new point(40, 15)
 
-points = [p1, p2, p3, p4, p5, p6]*/
+points = [p1, p2, p3, p4, p5, p6]
 
-var p1 = new point(-3,1)
+/*var p1 = new point(-3,1)
 var p2 = new point(2,5)
 var p3 = new point(4,7)
 var p4 = new point(9,7)
 
-points = [p1, p2, p3, p4]
+points = [p1, p2, p3, p4]*/
 
 // Do a check that differences in adjacent x-coordinates do not equal 0
-// causing division by zero later.
+// causing division by zero later. In other words xi+1 and xi are not 
+// the same x-value.
 var check = function(points){
+	
+}
+
+// Order all points by their x-coordinates. The other functions depend
+// on the points being ordered.
+var order = function(points){
 	
 }
 
@@ -80,7 +88,12 @@ var eq = function(points) {
 }
 
 
-// Creates a system of linear equations
+// Creates a system of empty equations. This object contains an equations array
+// to hold a system of equations. The initSystem function builds the system from
+// the eq object above. The equations are empty when initSystem is called (all
+// left and right hand arrays are empty). The cubicSplineCoefficients function
+// generates the cubic spline coefficients and places them in the correct 
+// positions in the equation arrays. 
 var System = function(points) {
 	
 	this.equations = []	
@@ -152,11 +165,7 @@ var System = function(points) {
 				this.equations[i].r[points.length] = 0
 				
 			}
-			else{
-				console.log("Error: Index out of range for" +
-							"Cubic Spline Coefficients")
-			}
-			
+			// removed else case (unnecessary)
 		}
 	}
 	
@@ -164,8 +173,8 @@ var System = function(points) {
 }
 
 
-
-
+// To solve cubic spline linear system of equations. This function returns
+// a set of solved coefficients used to create cubic spline equations.
 var SolveCubicSplineLinearSystem = function(equations){
 	var solutions = []
 	var solutionSet = []
@@ -237,7 +246,7 @@ var SolveCubicSplineLinearSystem = function(equations){
 // Create temporary cubic spline equations from the solved coefficients (t),   
 // original points array (p), and the change in x (dx) from which to sample 
 // values from these cubic equations. Then fill in the dataSets array with 
-// those points. X-cooridinates of points must be ordered.
+// those points. X-coordinates of points must be ordered.
 var produceDataSetsFromCubicEquations = function(t, p, dx){
 	var dataSets = []
 	var x = 0
@@ -273,33 +282,58 @@ var produceDataSetsFromCubicEquations = function(t, p, dx){
 }
 
 
-// Testing to graph data to canvas
+// Graph data to canvas
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d')
 var width = ctx.canvas.width
 var height = ctx.canvas.height
-var cw = width/2
-var ch = height/2
+var hCenter = width/2   	//horizontal center
+var vCenter = height/2 		//vertical center
+var hShift = 100 			// horizontal shift
+var vShift = 0 				// vertical shift
+var xScale = 16		// x scaling factor
+var yScale = 12		// y scaling factor
+var margin = 10
 
 var graphDataSet = function(data, points){
 	
-	ctx.fillStyle="rgba(0,0,0)"
+	// draw x-axis
+	ctx.strokeStyle="rgb(0,0,0)"
+	ctx.beginPath()
+	ctx.moveTo(margin, vCenter)
+	ctx.lineTo(width - margin, vCenter)
+	ctx.stroke()
+		
+	// calculate y-axis position
+	var xOrigin = 0
+	var delta = 0
+		
+	delta = data[0][1].x - data[0][0].x
+	xOrigin = -(xScale*delta*points[0].x) + hShift
+	ctx.beginPath()
+	ctx.moveTo(xOrigin, margin)
+	ctx.lineTo(xOrigin, height - margin)
+	ctx.stroke()
+		
+	// draw path for data set
+	ctx.strokeStyle="rgb(0,0,255)"
 	for (var i = 0; i < data.length; i++){
 		for (var j = 0; j < data[i].length - 1; j++){
-			ctx.beginPath();
-			ctx.moveTo(data[i][j].x * 16 + 100, ch - data[i][j].y * 12 )
-			ctx.lineTo(data[i][j+1].x * 16 + 100, ch - data[i][j+1].y * 12)
-			ctx.stroke()
-			
-			
-		}
-		
+			ctx.beginPath()
+			ctx.moveTo(data[i][j].x * xScale + hShift, 
+					   vCenter - data[i][j].y * yScale)
+			ctx.lineTo(data[i][j+1].x * xScale + hShift, 
+					   vCenter - data[i][j+1].y * yScale)
+			ctx.stroke()			
+		}		
 	}
 	
-	ctx.fillStyle="rgba(255,0,0)"
+	// draw paths and fill circle to represent original points
+	ctx.fillStyle="rgb(255,0,0)"
 	for (var i = 0; i < points.length; i++){
 		ctx.beginPath()
-		ctx.arc(points[i].x * 16 + 100, ch - points[i].y * 12, 10, 0, 2*Math.PI)
+		ctx.arc(points[i].x * xScale + hShift, vCenter - points[i].y * yScale,
+				6, 0, 2*Math.PI)
 		ctx.closePath()
 		ctx.fill()
 	}
@@ -307,7 +341,7 @@ var graphDataSet = function(data, points){
 }
 
 
-
+// Calling functions...
 var s = new System(points)
 s.initSystem()
 s.cubicSplineCoefficients()
@@ -315,7 +349,4 @@ s.cubicSplineCoefficients()
 var t = SolveCubicSplineLinearSystem(s.equations)
 var dataSet = produceDataSetsFromCubicEquations(t, points, 0.1)
 graphDataSet(dataSet, points)
-
-
-
 
