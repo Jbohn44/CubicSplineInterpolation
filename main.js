@@ -21,13 +21,14 @@ console.log("Hello Dane!");
 class Point {
 	constructor(_x, _y) {
 		this.x = _x
-		this.y = _y	
+		this.y = _y
 	}
-	
+
 }
 
 // let points = [];
 
+/* This section is for point forms/adding/removing points */
 let tempPointArr = [];
 
 //creates and adds points to point array (temp array for now)
@@ -35,18 +36,62 @@ function addPoint() {
 	const xPoint = document.getElementById('x-cord');
 	const yPoint = document.getElementById('y-cord');
 	//adding pluses converts to number - NOTE- will need validation checks to be safe
-	let point = new Point(+xPoint.value, +yPoint.value); 
+	let point = new Point(+xPoint.value, +yPoint.value);
 	tempPointArr.push(point);
+
+	//add id to each point object
+	addId(tempPointArr);
+
+	//add card to card area
+	addCards(tempPointArr);
+
 }
 
+function addCards(pointArray) {
+
+	const pointContainer = document.getElementById('pointCardContainer');
+	//clears previous html
+	pointContainer.innerHTML = '';
+	pointArray.forEach((point, i) => {
+		let card = `<div class="point-card">
+					<div class="point-card-header"><h4>Point</h4><div class="delete" onclick='removePoint(${point.id})'>x</div></div>
+					<div class="point-card-body">
+					<div>x: ${point.x}</div>
+					<div>y: ${point.y}</div>
+					<div>ID: ${point.id}</div>
+					</div>
+					</div>`;
+		pointContainer.insertAdjacentHTML('beforeend', card);
+	});
+
+}
+
+function removePoint(pointId) {
+	//remove point
+	tempPointArr = tempPointArr.filter((point) => point.id !== pointId);
+
+	//re-assign ids
+	addId(tempPointArr);
+
+	//re-render point cards
+	addCards(tempPointArr);
+
+}
+
+//function iterates over point objects and appends ids.
+function addId(pointArray) {
+	pointArray.forEach((point, i) => { return point.id = i + 1 });
+}
+
+/* End of Point Form Section */
 
 //main point array - Dane we can init point array this way
-let points = [ new Point(-3,12),
-	new Point(2, 5),
-	new Point(4, 7),
-	new Point(9, 7),
-	new Point(16, -1),
-	new Point(40, 15) ]; 
+let points = [new Point(-3, 12),
+new Point(2, 5),
+new Point(4, 7),
+new Point(9, 7),
+new Point(16, -1),
+new Point(40, 15)];
 // console.log('points', points);
 // let p1 = new Point(-3,12)
 // let p2 = new Point(2, 5)
@@ -67,47 +112,47 @@ points = [p1, p2, p3, p4]*/
 // Do a check that differences in adjacent x-coordinates do not equal 0
 // causing division by zero later. In other words xi+1 and xi are not 
 // the same x-value.
-var check = function(points){
-	
+var check = function (points) {
+
 }
 
 // Order all points by their x-coordinates. The other functions depend
 // on the points being ordered.
-var order = function(points){
-	
+var order = function (points) {
+
 }
 
 // Create an equation from arrays with one more element than the number
 // of points. If there are n points then there are n + 1 elements in the
 // left and right arrays. The positions 1,2,...n are for n variables and 
 // the n + 1 position holds the constant term.
-var eq = function(points) {
+var eq = function (points) {
 	this.id = 0
 	this.l = [] //left side of equation
 	this.r = [] //right side of equation
 	this.terms = points.length
-	
-	this.buildLinearEquation = function(){
-		for (var i = 0; i <= this.terms; i++){
+
+	this.buildLinearEquation = function () {
+		for (var i = 0; i <= this.terms; i++) {
 			this.l.push(0)
 			this.r.push(0)
 		}
 	}
-	
-	this.copyEquation = function(){
+
+	this.copyEquation = function () {
 		copy = new eq({})
-		for (var i = 0; i < this.l.length; i++){
+		for (var i = 0; i < this.l.length; i++) {
 			copy.l.push(this.l[i])
 		}
-		for (var i = 0; i < this.r.length; i++){
+		for (var i = 0; i < this.r.length; i++) {
 			copy.r.push(this.r[i])
 		}
 		copy.id = this.id
 		copy.terms = this.terms
 		return copy
-	}	
-	
-	
+	}
+
+
 }
 
 
@@ -117,151 +162,151 @@ var eq = function(points) {
 // left and right hand arrays are empty). The cubicSplineCoefficients function
 // generates the cubic spline coefficients and places them in the correct 
 // positions in the equation arrays. 
-var System = function(points) {
-	
-	this.equations = []	
-	
-	this.initSystem = function(){
-		for (var i = 0; i < points.length; i++){
+var System = function (points) {
+
+	this.equations = []
+
+	this.initSystem = function () {
+		for (var i = 0; i < points.length; i++) {
 			var equation = new eq(points)
 			equation.id = i
 			equation.buildLinearEquation()
 			this.equations.push(equation)
 		}
 	}
-	
-	
-	this.cubicSplineCoefficients = function(){
-		
+
+
+	this.cubicSplineCoefficients = function () {
+
 		var d = []
 		d.push(0)
-		for (var i = 0; i < points.length - 2; i++){
-			var term1 = (points[i+2].y - points[i+1].y)/
-						(points[i+2].x - points[i+1].x)
-						
-			var term2 = (points[i+1].y - points[i].y)/
-						(points[i+1].x - points[i].x)
-						
+		for (var i = 0; i < points.length - 2; i++) {
+			var term1 = (points[i + 2].y - points[i + 1].y) /
+				(points[i + 2].x - points[i + 1].x)
+
+			var term2 = (points[i + 1].y - points[i].y) /
+				(points[i + 1].x - points[i].x)
+
 			var dValue = 6 * (term1 - term2)
-			
+
 			d.push(dValue)
 		}
 		d.push(0)
-		
+
 		//console.log(d)
-		
+
 		for (var i = 0; i < points.length; i++) {
-			
+
 			if (i == 0) {
-				
+
 				this.equations[i].l[0] = 1
-				
-				for (var j = 1; j < points.length; j++){
+
+				for (var j = 1; j < points.length; j++) {
 					this.equations[i].l[j] = 0
 				}
-				
+
 				this.equations[i].r[points.length] = 0
 			}
 			else if (i == 1) {
-				
+
 				this.equations[i].l[0] = 0
 				this.equations[i].l[1] = 2 * (points[2].x - points[0].x)
 				this.equations[i].l[2] = points[2].x - points[1].x
 				this.equations[i].r[points.length] = d[1]
 			}
-			else if (i < points.length - 1){
-				this.equations[i].l[i-1] = points[i].x - points[i-1].x
-				this.equations[i].l[i] = 2 * (points[i+1].x - points[i-1].x)
-				this.equations[i].l[i+1] = points[i+1].x - points[i].x
+			else if (i < points.length - 1) {
+				this.equations[i].l[i - 1] = points[i].x - points[i - 1].x
+				this.equations[i].l[i] = 2 * (points[i + 1].x - points[i - 1].x)
+				this.equations[i].l[i + 1] = points[i + 1].x - points[i].x
 				this.equations[i].r[points.length] = d[i]
 			}
-			else if (i == points.length - 1){
-				
+			else if (i == points.length - 1) {
+
 				this.equations[i - 1].l[i] = 0 // the last variable is 0
 				// in second to last equation since ti = 0
-								
-				for (var j = 0; j < points.length - 1; j++){
+
+				for (var j = 0; j < points.length - 1; j++) {
 					this.equations[i].l[j] = 0
 				}
 				this.equations[i].l[i] = 1
-				
+
 				this.equations[i].r[points.length] = 0
-				
+
 			}
 			// removed else case (unnecessary)
 		}
 	}
-	
-	
+
+
 }
 
 
 // To solve cubic spline linear system of equations. This function returns
 // a set of solved coefficients used to create cubic spline equations.
-var SolveCubicSplineLinearSystem = function(equations){
+var SolveCubicSplineLinearSystem = function (equations) {
 	var solutions = []
 	var solutionSet = []
-	
+
 	// Copy the contents of equations array into solutions array...
 	solutions.push(equations[0].copyEquation())
-		
-	for (var i = 1; i < equations.length; i++){
-		for (var j = 0; j <= equations.length; j++){
-			if (j != i){
+
+	for (var i = 1; i < equations.length; i++) {
+		for (var j = 0; j <= equations.length; j++) {
+			if (j != i) {
 				// negate and combine l-hand coefficients with r-hand side
 				equations[i].r[j] = equations[i].r[j] - equations[i].l[j]
 				equations[i].l[j] = 0
 			}
 		}
-		
+
 		// divide r-hand side by ith variable coefficient
-		for (var j = 0; j <= equations.length; j++){
-			if (equations[i].l[i] != 0){
-				equations[i].r[j] = equations[i].r[j]/equations[i].l[i]				
+		for (var j = 0; j <= equations.length; j++) {
+			if (equations[i].l[i] != 0) {
+				equations[i].r[j] = equations[i].r[j] / equations[i].l[i]
 			}
-		} 
-		
+		}
+
 		//Division by ith coefficient complete
-		equations[i].l[i] = 1 
-		
+		equations[i].l[i] = 1
+
 		// Next complete substitution of variables into equation i + 1
 		// But first save solution
 		solutions.push(equations[i].copyEquation())
-		
+
 		// Multiply by ith coeffiecient in equation i + 1
 		// Then add each r-hand coefficient in equation i to l-hand
 		// in equation i + 1
-		for (var j = 0; j <= equations.length; j++){
-			if (i < equations.length - 1){
-				equations[i].r[j] = equations[i+1].l[i]*equations[i].r[j]
-				equations[i+1].l[j] = equations[i+1].l[j] + equations[i].r[j]
-				if (j == equations.length){
-					equations[i+1].l[i] = 0
+		for (var j = 0; j <= equations.length; j++) {
+			if (i < equations.length - 1) {
+				equations[i].r[j] = equations[i + 1].l[i] * equations[i].r[j]
+				equations[i + 1].l[j] = equations[i + 1].l[j] + equations[i].r[j]
+				if (j == equations.length) {
+					equations[i + 1].l[i] = 0
 				}
 			}
 		}
-				
+
 	}
-		
+
 	// Back-substitution to solve for solution set. Iterate through system of
 	// equations in reverse order and substitute known variables. Set first
 	// solution to zero (first and last coefficients are zero for natural 
 	// cubic spline interpolation).
-	
+
 	solutionSet.push(0)
-	
-	for (var i = solutions.length - 1; i > 0; i--){
-		var solution = solutions[i].r[solutions.length]*solutions[i-1].r[i] + 
-			solutions[i-1].r[solutions.length]
+
+	for (var i = solutions.length - 1; i > 0; i--) {
+		var solution = solutions[i].r[solutions.length] * solutions[i - 1].r[i] +
+			solutions[i - 1].r[solutions.length]
 		solutionSet.push(solution)
-		
+
 	}
 	solutionSet.reverse() // reorder the solution set
-	
+
 	//console.log(equations)
 	console.log(solutions)
 	console.log(solutionSet)
-	
+
 	return solutionSet // array of solved coefficients to create cubic eq
 }
 
@@ -270,38 +315,38 @@ var SolveCubicSplineLinearSystem = function(equations){
 // original points array (p), and the change in x (dx) from which to sample 
 // values from these cubic equations. Then fill in the dataSets array with 
 // those points. X-coordinates of points must be ordered.
-var produceDataSetsFromCubicEquations = function(t, p, dx){
+var produceDataSetsFromCubicEquations = function (t, p, dx) {
 	var dataSets = []
 	var x = 0
 	var y = 0
 	var value1 = 0
 	var value2 = 0
 	var value3 = 0
-	
-	for (var i = 1; i < t.length; i++){
+
+	for (var i = 1; i < t.length; i++) {
 		dataSets.push([])
-		x = p[i-1].x 
-		
-		while (x < p[i].x){
-			value1 = t[i-1]*Math.pow(p[i].x - x, 3) + t[i]*Math.pow(x - p[i-1].x, 3)
-			value1 = value1/(6*(p[i].x - p[i-1].x))
-			value2 = p[i].y*(x - p[i-1].x) + p[i-1].y*(p[i].x - x)
-			value2 = value2/(p[i].x - p[i-1].x)
-			value3 = t[i]*(x - p[i-1].x) + t[i-1]*(p[i].x - x)
-			value3 = value3*(p[i].x - p[i-1].x)
-			value3 = -value3/6
-			
+		x = p[i - 1].x
+
+		while (x < p[i].x) {
+			value1 = t[i - 1] * Math.pow(p[i].x - x, 3) + t[i] * Math.pow(x - p[i - 1].x, 3)
+			value1 = value1 / (6 * (p[i].x - p[i - 1].x))
+			value2 = p[i].y * (x - p[i - 1].x) + p[i - 1].y * (p[i].x - x)
+			value2 = value2 / (p[i].x - p[i - 1].x)
+			value3 = t[i] * (x - p[i - 1].x) + t[i - 1] * (p[i].x - x)
+			value3 = value3 * (p[i].x - p[i - 1].x)
+			value3 = -value3 / 6
+
 			// Add the three quantities to get the y value
 			y = value1 + value2 + value3
-			
-			dataSets[i-1].push(new Point(x, y))
+
+			dataSets[i - 1].push(new Point(x, y))
 			x += dx
 		}
 	}
-	
+
 	//console.log(dataSets)
 	return dataSets
-	
+
 }
 
 
@@ -310,57 +355,57 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d')
 var width = ctx.canvas.width
 var height = ctx.canvas.height
-var hCenter = width/2   	//horizontal center
-var vCenter = height/2 		//vertical center
+var hCenter = width / 2   	//horizontal center
+var vCenter = height / 2 		//vertical center
 var hShift = 100 			// horizontal shift
 var vShift = 0 				// vertical shift
 var xScale = 16		// x scaling factor
 var yScale = 12		// y scaling factor
 var margin = 10
 
-var graphDataSet = function(data, points){
-	
+var graphDataSet = function (data, points) {
+
 	// draw x-axis
-	ctx.strokeStyle="rgb(0,0,0)"
+	ctx.strokeStyle = "rgb(0,0,0)"
 	ctx.beginPath()
 	ctx.moveTo(margin, vCenter)
 	ctx.lineTo(width - margin, vCenter)
 	ctx.stroke()
-		
+
 	// calculate y-axis position
 	var xOrigin = 0
 	var delta = 0
-		
+
 	delta = data[0][1].x - data[0][0].x
-	xOrigin = -(xScale*delta*points[0].x) + hShift
+	xOrigin = -(xScale * delta * points[0].x) + hShift
 	ctx.beginPath()
 	ctx.moveTo(xOrigin, margin)
 	ctx.lineTo(xOrigin, height - margin)
 	ctx.stroke()
-		
+
 	// draw path for data set
-	ctx.strokeStyle="rgb(0,0,255)"
-	for (var i = 0; i < data.length; i++){
-		for (var j = 0; j < data[i].length - 1; j++){
+	ctx.strokeStyle = "rgb(0,0,255)"
+	for (var i = 0; i < data.length; i++) {
+		for (var j = 0; j < data[i].length - 1; j++) {
 			ctx.beginPath()
-			ctx.moveTo(data[i][j].x * xScale + hShift, 
-					   vCenter - data[i][j].y * yScale)
-			ctx.lineTo(data[i][j+1].x * xScale + hShift, 
-					   vCenter - data[i][j+1].y * yScale)
-			ctx.stroke()			
-		}		
+			ctx.moveTo(data[i][j].x * xScale + hShift,
+				vCenter - data[i][j].y * yScale)
+			ctx.lineTo(data[i][j + 1].x * xScale + hShift,
+				vCenter - data[i][j + 1].y * yScale)
+			ctx.stroke()
+		}
 	}
-	
+
 	// draw paths and fill circle to represent original points
-	ctx.fillStyle="rgb(255,0,0)"
-	for (var i = 0; i < points.length; i++){
+	ctx.fillStyle = "rgb(255,0,0)"
+	for (var i = 0; i < points.length; i++) {
 		ctx.beginPath()
 		ctx.arc(points[i].x * xScale + hShift, vCenter - points[i].y * yScale,
-				6, 0, 2*Math.PI)
+			6, 0, 2 * Math.PI)
 		ctx.closePath()
 		ctx.fill()
 	}
-	
+
 }
 
 

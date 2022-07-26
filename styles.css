@@ -104,14 +104,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .point-card-header{
+    display: flex;
+    justify-content: space-between;
     top: 0;
     width: 100%;
     padding: .25rem;
     position: absolute;
     background-color: crimson;
     color: white;
-
-
 }
 
 .point-card-body{
@@ -123,3 +123,10 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: center;
 }
 
+.delete{
+    font-weight: bold;
+}
+
+.delete:hover{
+    cursor: pointer;
+}
