@@ -18,21 +18,30 @@ console.log("Hello Dane!");
 
 
 // A point object
-var point = function(x, y){
-	this.x = x
-	this.y = y	
+class Point {
+	constructor(_x, _y) {
+		this.x = _x
+		this.y = _y	
+	}
+	
 }
 
-var points = [] //main point array
+//main point array - Dane we can init point array this way
+let points = [ new Point(-3,12),
+	new Point(2, 5),
+	new Point(4, 7),
+	new Point(9, 7),
+	new Point(16, -1),
+	new Point(40, 15) ]; 
+console.log('points', points);
+// let p1 = new Point(-3,12)
+// let p2 = new Point(2, 5)
+// var p3 = new Point(4, 7)
+// var p4 = new Point(9, 7)
+// var p5 = new Point(16, -1)
+// var p6 = new Point(40, 15)
 
-var p1 = new point(-3,12)
-var p2 = new point(2, 5)
-var p3 = new point(4, 7)
-var p4 = new point(9, 7)
-var p5 = new point(16, -1)
-var p6 = new point(40, 15)
-
-points = [p1, p2, p3, p4, p5, p6]
+// points = [p1, p2, p3, p4, p5, p6]
 
 /*var p1 = new point(-3,1)
 var p2 = new point(2,5)
@@ -271,7 +280,7 @@ var produceDataSetsFromCubicEquations = function(t, p, dx){
 			// Add the three quantities to get the y value
 			y = value1 + value2 + value3
 			
-			dataSets[i-1].push(new point(x, y))
+			dataSets[i-1].push(new Point(x, y))
 			x += dx
 		}
 	}

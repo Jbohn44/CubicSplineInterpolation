@@ -1,0 +1,26 @@
+*, *::before, *::after{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+}
+
+.wrapper{
+    display: flex;
+}
+.canvas-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    border: 2px solid rgb(82, 82, 82);
+}
+
+.point-form-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    border: 2px solid rgb(82, 82, 82);
+}
