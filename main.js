@@ -26,6 +26,19 @@ class Point {
 	
 }
 
+// let points = [];
+
+let tempPointArr = [];
+
+document.getElementById("point-form").addEventListener("submit", function(e) {
+	let xPoint = document.getElementById('x-cord');
+	let yPoint = document.getElementById('y-cord');
+
+	let point = new Point(xPoint, yPoint);
+	tempPointArr.push(point);
+  });
+
+  console.log(tempPointArr)
 //main point array - Dane we can init point array this way
 let points = [ new Point(-3,12),
 	new Point(2, 5),

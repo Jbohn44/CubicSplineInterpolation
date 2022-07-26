@@ -1,11 +1,31 @@
 *, *::before, *::after{
     box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 body{
     margin: 0;
 }
 
+input {
+    width: 100%;
+    padding: .5rem;
+    margin: .5rem 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    /* justify-content: center; */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    padding: 0;
+    margin: 0;
+}
+
+/* Page Stylings */
 .wrapper{
     display: flex;
 }
@@ -13,14 +33,63 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50%;
+    width: 75%;
     border: 2px solid rgb(82, 82, 82);
 }
 
 .point-form-container{
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 50%;
+    justify-content: flex-start;
+    width: 25%;
     border: 2px solid rgb(82, 82, 82);
+    padding: .25rem;
 }
+
+/* Form Stylings */
+.point-form{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    border: 2px solid darkgray;
+    width: 100%;
+}
+
+.point-form-header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    padding: .25rem;
+    background-color: dodgerblue;
+    color: white;
+}
+
+.point-form-body {
+    padding: 2rem;
+    width: 100%;
+}
+
+
+
+/* Custom Button */
+.btn-custom {
+    padding: .5rem;
+    outline: none;
+    border: none;
+    color: white;
+    background-color: dodgerblue;
+    font-weight: bold;
+    border-radius: .25rem;
+}
+
+.btn-custom:hover{
+    cursor: pointer;
+}
+
+/* space for button */
+.btn-margin{
+    margin-top: 1rem;
+}
+
+
