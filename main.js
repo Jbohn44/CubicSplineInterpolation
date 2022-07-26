@@ -30,15 +30,16 @@ class Point {
 
 let tempPointArr = [];
 
-document.getElementById("point-form").addEventListener("submit", function(e) {
-	let xPoint = document.getElementById('x-cord');
-	let yPoint = document.getElementById('y-cord');
-
-	let point = new Point(xPoint, yPoint);
+//creates and adds points to point array (temp array for now)
+function addPoint() {
+	const xPoint = document.getElementById('x-cord');
+	const yPoint = document.getElementById('y-cord');
+	//adding pluses converts to number - NOTE- will need validation checks to be safe
+	let point = new Point(+xPoint.value, +yPoint.value); 
 	tempPointArr.push(point);
-  });
+}
 
-  console.log(tempPointArr)
+
 //main point array - Dane we can init point array this way
 let points = [ new Point(-3,12),
 	new Point(2, 5),
@@ -46,7 +47,7 @@ let points = [ new Point(-3,12),
 	new Point(9, 7),
 	new Point(16, -1),
 	new Point(40, 15) ]; 
-console.log('points', points);
+// console.log('points', points);
 // let p1 = new Point(-3,12)
 // let p2 = new Point(2, 5)
 // var p3 = new Point(4, 7)

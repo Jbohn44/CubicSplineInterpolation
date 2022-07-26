@@ -13,13 +13,6 @@ input {
     margin: .5rem 0;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    /* align-items: center; */
-    /* justify-content: center; */
-}
-
 h1, h2, h3, h4, h5, h6 {
     padding: 0;
     margin: 0;
@@ -43,7 +36,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: flex-start;
     width: 25%;
-    border: 2px solid rgb(82, 82, 82);
+    /* border: 2px solid rgb(82, 82, 82); */
     padding: .25rem;
 }
 
@@ -92,4 +85,41 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 1rem;
 }
 
+/* Point Card Stylings */
+
+.point-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+
+}
+
+.point-card{
+    position:relative;
+    width: 20%;
+    margin: .25rem;
+    border: 1px solid lightgray;
+}
+
+.point-card-header{
+    top: 0;
+    width: 100%;
+    padding: .25rem;
+    position: absolute;
+    background-color: crimson;
+    color: white;
+
+
+}
+
+.point-card-body{
+    margin-top: 1.5rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
