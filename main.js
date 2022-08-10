@@ -54,11 +54,11 @@ function addCards(pointArray) {
 	pointContainer.innerHTML = '';
 	pointArray.forEach((point, i) => {
 		let card = `<div class="point-card">
-					<div class="point-card-header"><h4>Point</h4><div class="delete" onclick='removePoint(${point.id})'>x</div></div>
 					<div class="point-card-body">
+					<div>ID: ${point.id}</div>
 					<div>x: ${point.x}</div>
 					<div>y: ${point.y}</div>
-					<div>ID: ${point.id}</div>
+					<div class="delete" onclick='removePoint(${point.id})'>[x]</div>
 					</div>
 					</div>`;
 		pointContainer.insertAdjacentHTML('beforeend', card);
